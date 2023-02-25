@@ -1,0 +1,26 @@
+=== insert ===
+(dict_insert(dicts, entryBig, entry1b)) = 0
+(dict_insert(dicts, entry1a, entryBig)) = 0
+(dict_insert(dicts, entry1a, entry1b)) = 1
+(dict_insert(dicts, entry1a, entry1b)) = 1
+(dict_insert(dicts, entry2a, entry2b)) = 1
+(dict_insert(dicts, entry3a, entry3b)) = 1
+(dict_insert(dicts, entry4, entry3b)) = 1
+(dict_insert(dicts, entry5, entry3b)) = 1
+(dict_insert(dicts, entry6, entry3b)) = 1
+=== list ===
+deutsch              | englisch            
+==================== | ====================
+aussterbend          | dwindling           
+Kartoffelsalat       | potato salad        
+Mitarbeiter          | employee            
+Mitarbeiter          | employee            
+schwindend           | dwindling           
+Schwund              | dwindling           
+versiegend           | dwindling           
+
+englisch             | deutsch             
+==================== | ====================
+dwindling            | schwindend          
+dwindling            | aussterbend         
+dwindling            | versiegend    

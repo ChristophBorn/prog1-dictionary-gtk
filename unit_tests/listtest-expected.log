@@ -1,0 +1,101 @@
+=== insert1 ===
+(list_insert_first(pList, textA)) = 1
+(list_insert_first(pList, textB)) = 1
+(list_insert_last(pList, textC)) = 1
+(list_insert_last(pList, textD)) = 1
+(list_insert_last(pList, textE)) = 1
+=== get separate ===
+((char*) list_get_curr(pList)) = (null)
+((char*) list_get_prev(pList)) = (null)
+((char*) list_get_next(pList)) = (null)
+((char*) list_get_first(pList)) = Olaf
+((char*) list_get_last(pList)) = Perry
+((char*) list_get_at(pList, 0)) = Olaf
+((char*) list_get_at(pList, 2)) = Anna
+((char*) list_get_at(pList, 4)) = Perry
+=== get loop forwards ===
+Olaf
+Richard
+Anna
+Ulrike
+Perry
+=== get loop backwards ===
+Perry
+Ulrike
+Anna
+Richard
+Olaf
+=== remove1 ===
+(list_delete(pList)) = 0
+((char*) list_get_at(pList, 1)) = Richard
+(list_remove_next(pList)) = 1
+(0) Olaf, (1) Richard, (2) Ulrike, (3) Perry, 
+(list_remove_prev(pList)) = 1
+(0) Richard, (1) Ulrike, (2) Perry, 
+(list_remove_curr(pList)) = 1
+(0) Ulrike, (1) Perry, 
+(list_remove_next(pList)) = 0
+(list_remove_prev(pList)) = 0
+(list_remove_curr(pList)) = 0
+(list_remove_first(pList)) = 1
+(0) Perry, 
+(list_remove_last(pList)) = 1
+(list_remove_first(pList)) = 0
+(list_remove_last(pList)) = 0
+(list_delete(pList)) = 1
+=== insert2 ===
+(list_insert_before(pList, textA)) = 0
+(list_insert_behind(pList, textB)) = 0
+((char*) list_get_first(pList)) = (null)
+(list_insert_before(pList, textA)) = 1
+(list_insert_behind(pList, textB)) = 1
+((char*) list_get_last(pList)) = Richard
+(list_insert_before(pList, textC)) = 1
+(list_insert_behind(pList, textD)) = 1
+(list_remove_prev(pList)) = 0
+Olaf
+(list_remove_prev(pList)) = 1
+Anna
+(list_remove_prev(pList)) = 1
+Richard
+(list_remove_prev(pList)) = 1
+Ulrike
+(list_remove_last(pList)) = 1
+(list_remove_first(pList)) = 0
+(list_delete(pList)) = 1
+=== insert sorted ===
+(list_insert_sorted(pList, textA, compare)) = 1
+(list_insert_sorted(pList, textB, compare)) = 1
+((char*) list_get_first(pList)) = Olaf
+(list_insert_sorted(pList, textC, compare)) = 1
+((char*) list_get_curr(pList)) = Olaf
+(list_insert_sorted(pList, textD, compare)) = 1
+(list_remove_prev(pList)) = 0
+Anna
+(list_remove_prev(pList)) = 1
+Olaf
+(list_remove_prev(pList)) = 1
+Richard
+(list_remove_prev(pList)) = 1
+Ulrike
+(list_remove_last(pList)) = 1
+(list_remove_first(pList)) = 0
+(list_delete(pList)) = 1
+=== insert sorted reverse ===
+(list_insert_sorted(pList, textA, compare_rev)) = 1
+(list_insert_sorted(pList, textB, compare_rev)) = 1
+((char*) list_get_first(pList)) = Richard
+(list_insert_sorted(pList, textC, compare_rev)) = 1
+((char*) list_get_curr(pList)) = Richard
+(list_insert_sorted(pList, textD, compare_rev)) = 1
+(list_remove_prev(pList)) = 0
+Ulrike
+(list_remove_prev(pList)) = 1
+Richard
+(list_remove_prev(pList)) = 1
+Olaf
+(list_remove_prev(pList)) = 1
+Anna
+(list_remove_last(pList)) = 1
+(list_remove_first(pList)) = 0
+(list_delete(pList)) = 1
