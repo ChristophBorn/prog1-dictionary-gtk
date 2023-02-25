@@ -86,13 +86,13 @@ bool dict_remove(tList** dicts, char* wordDe, char* wordEn) {
     int i;
     for(i=0; i<2; i++) {
         for(tmp = list_get_first(dicts[i]); tmp; tmp = list_get_next(dicts[i])) {
-            if(i == 0 && (strcmp(tmp->wordDe, wordDe) == 0
-                       || strcmp(tmp->wordEn, wordEn) == 0)) {
+            if(i == 0 && strcmp(tmp->wordDe, wordDe) == 0
+                      && strcmp(tmp->wordEn, wordEn) == 0) {
                 target = tmp;
             }
             if(tmp == target) {                
                 list_remove_curr(dicts[i]);
-                break; // TODO does it break both loops?
+                break;
             }
         }
         
@@ -109,18 +109,12 @@ tList* dict_search(tList** dicts, int lang, char* query) {
     
     tList* res = list_create();
     tDEntry* tmp;
-    //char* word;
     char buf[DICT_MAX_WORD_LEN+1];
-    //int i;
 
-    //for(i=0; query[i] != 0; i++)  query[i] = tolower(query[i]);
     strcpytolower(lquery, query);
 
     for(tmp = list_get_first(dicts[lang]); tmp; tmp = list_get_next(dicts[lang])) {
         strcpytolower(buf, (lang == DICT_DE ? tmp->wordDe : tmp->wordEn));
-        /*word = (lang == DICT_DE ? tmp->wordDe : tmp->wordEn);
-        for(i=0; word[i] != 0; i++)  buf[i] = tolower(word[i]);
-        buf[i+1] = 0;*/
 
         // word contains query (case insensitive)
         if(strstr(buf, lquery))  list_insert_last(res, tmp);

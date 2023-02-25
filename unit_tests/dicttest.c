@@ -56,39 +56,33 @@ int main() {
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
-    /*puts("=== remove ===");
-    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry2b)); // TODO
-    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry1b)); // TODO
-    EVAL_INT_EXPR(dict_remove(dicts, entry3a, entry3b)); // TODO
+    puts("=== remove ===");
+    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry2b));
+    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry1b));
+    EVAL_INT_EXPR(dict_remove(dicts, entry3a, entry3b));
 
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
-    print_dict(dicts[DICT_EN], DICT_EN);*/
+    print_dict(dicts[DICT_EN], DICT_EN);
 
     puts("=== search ===");
-    res = dict_search(dicts, DICT_DE, entry1b);
+    EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_DE, entry1b));
     if(res)  print_dict(res, DICT_DE), dict_free(res);
-    else puts("(null)");
 
-    res = dict_search(dicts, DICT_EN, entry1a);
+    EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_EN, entry1a));
     if(res)  print_dict(res, DICT_EN), dict_free(res);
-    else puts("(null)");
     
-    res = dict_search(dicts, DICT_DE, entry1a);
+    EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_DE, entry1a));
     if(res)  print_dict(res, DICT_DE), dict_free(res);
-    else puts("(null)");
     
-    res = dict_search(dicts, DICT_EN, entry1b); // TODO
+    EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_EN, entry1b));
     if(res)  print_dict(res, DICT_EN), dict_free(res);
-    else puts("(null)");
     
-    res = dict_search(dicts, DICT_DE, "end");
+    EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_DE, "end"));
     if(res)  print_dict(res, DICT_DE), dict_free(res);
-    else puts("(null)");
     
-    res = dict_search(dicts, DICT_EN, entry3b);
+    EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_EN, entry3b));
     if(res)  print_dict(res, DICT_EN), dict_free(res);
-    else puts("(null)");
     
 
     puts("=== file ===");
