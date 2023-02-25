@@ -23,4 +23,42 @@ englisch             | deutsch
 ==================== | ====================
 dwindling            | aussterbend         
 dwindling            | schwindend          
-dwindling            | Schwund       
+dwindling            | Schwund             
+dwindling            | versiegend          
+employee             | Mitarbeiter         
+employee             | Mitarbeiter         
+potato salad         | Kartoffelsalat      
+=== search ===
+aussterbend employee
+kartoffelsalat employee
+mitarbeiter employee
+mitarbeiter employee
+schwindend employee
+schwund employee
+versiegend employee
+deutsch              | englisch            
+==================== | ====================
+dwindling mitarbeiter
+dwindling mitarbeiter
+dwindling mitarbeiter
+dwindling mitarbeiter
+employee mitarbeiter
+employee mitarbeiter
+potato salad mitarbeiter
+englisch             | deutsch             
+==================== | ====================
+aussterbend mitarbeiter
+kartoffelsalat mitarbeiter
+mitarbeiter mitarbeiter
+TEST
+pCnct = 0x5605f3be1bc0
+pRef = 0x5605f3be1b90
+pRef->pNext = 0x5605f3be1b90
+pRef->pNext->pPrev = 0x5605f3be1b90
+mitarbeiter mitarbeiter
+TEST
+pCnct = 0x5605f3be1be0
+pRef = 0x5605f3be1bc0
+pRef->pNext = 0x5605f3be1b90
+pRef->pNext->pPrev = 0x5605f3be1bc0
+schwindend mitarbeiter

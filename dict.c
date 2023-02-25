@@ -111,7 +111,7 @@ tList* dict_search(tList** dicts, int lang, char* query) {
     tDEntry* tmp;
     //char* word;
     char buf[DICT_MAX_WORD_LEN+1];
-    //int i;
+    int i=0;
 
     //for(i=0; query[i] != 0; i++)  query[i] = tolower(query[i]);
     strcpytolower(lquery, query);
@@ -123,7 +123,9 @@ tList* dict_search(tList** dicts, int lang, char* query) {
         buf[i+1] = 0;*/
 
         // word contains query (case insensitive)
-        if(strstr(buf, lquery))  list_insert_last(res, tmp);
+        printf("%s %s\n", buf, lquery);
+        //if(i++ > 5)  return NULL;
+        if(strstr(buf, lquery))  list_insert_last_test(res, tmp);
     }
 
     free(lquery);

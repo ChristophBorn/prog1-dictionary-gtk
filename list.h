@@ -25,6 +25,7 @@ bool list_insert_before(tList* pList, void* pData); // inserts item before curre
 bool list_insert_behind(tList* pList, void* pData); // inserts item behind current item
 bool list_insert_first(tList* pList, void* pData);
 bool list_insert_last(tList* pList, void* pData);
+bool list_insert_last_test(tList* pList, void* pData); // TODO
 
 // inserts pData before first item with compare(item, pData) >= 0 or at the end
 bool list_insert_sorted(tList* pList, void* pData, int(*compare)(void *, void *));

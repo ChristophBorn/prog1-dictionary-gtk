@@ -78,7 +78,8 @@ int main() {
     if(res)  print_dict(res, DICT_DE), dict_free(res);
     else puts("(null)");
     
-    res = dict_search(dicts, DICT_EN, entry1b); // TODO
+    res = dict_search(dicts, DICT_EN, entry2b); // TODO produces exit code 139 "Speicherzugriffsfehler  (Speicherabzug geschrieben)"
+    return 6;
     if(res)  print_dict(res, DICT_EN), dict_free(res);
     else puts("(null)");
     
@@ -98,6 +99,7 @@ int main() {
     EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "dicttest_assets/dict.txt"));
     dict_clear(dicts[DICT_DE]);
     dict_clear(dicts[DICT_EN]);
+    return 1;
     EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/dict.txt"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");

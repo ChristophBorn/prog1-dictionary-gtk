@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <stdbool.h>
 
 #include "list.h"
@@ -35,6 +36,24 @@ bool list_delete(tList* pList) {
 
     return true;
 }
+/*private*/ bool insert_behind_cnct_test(tLCnct* pRef, void* pData) {
+    tLCnct* pCnct = malloc(sizeof(tLCnct));
+    if(!pCnct)  return false;
+
+    pCnct->pData = pData;
+    pCnct->pPrev = pRef;
+    pCnct->pNext = pRef->pNext;
+    printf("pCnct = %p\n", pCnct);
+    printf("pRef = %p\n", pRef);
+    printf("pRef->pNext = %p\n", pRef->pNext);
+    printf("pRef->pNext->pPrev = %p\n", pRef->pNext->pPrev);
+    //return true;
+
+    pRef->pNext->pPrev = pCnct;
+    pRef->pNext = pCnct;
+
+    return true;
+}
 bool list_insert_before(tList* pList, void* pData) {
     if(!pList->pCurr)  return false;
 
@@ -50,6 +69,10 @@ bool list_insert_first(tList* pList, void* pData) {
 }
 bool list_insert_last(tList* pList, void* pData) {
     return insert_behind_cnct(pList->head.pPrev, pData);
+}
+bool list_insert_last_test(tList* pList, void* pData) {
+    puts("TEST");
+    return insert_behind_cnct_test(pList->head.pPrev, pData);
 }
 
 bool list_insert_sorted(tList* pList, void* pData, int(*compare)(void *, void *)) {
