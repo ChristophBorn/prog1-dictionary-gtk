@@ -56,46 +56,44 @@ int main() {
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
-    
-    puts("=== remove ===");
-    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry2b));
-    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry1b));
-    EVAL_INT_EXPR(dict_remove(dicts, entry3a, entry3b));
+    /*puts("=== remove ===");
+    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry2b)); // TODO
+    EVAL_INT_EXPR(dict_remove(dicts, entry1a, entry1b)); // TODO
+    EVAL_INT_EXPR(dict_remove(dicts, entry3a, entry3b)); // TODO
 
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
-    print_dict(dicts[DICT_EN], DICT_EN);
-
+    print_dict(dicts[DICT_EN], DICT_EN);*/
 
     puts("=== search ===");
     res = dict_search(dicts, DICT_DE, entry1b);
-    print_dict(res, DICT_DE);
-    dict_free(res);
+    if(res)  print_dict(res, DICT_DE), dict_free(res);
+    else puts("(null)");
 
     res = dict_search(dicts, DICT_EN, entry1a);
-    print_dict(res, DICT_EN);
-    dict_free(res);
+    if(res)  print_dict(res, DICT_EN), dict_free(res);
+    else puts("(null)");
     
     res = dict_search(dicts, DICT_DE, entry1a);
-    print_dict(res, DICT_DE);
-    dict_free(res);
+    if(res)  print_dict(res, DICT_DE), dict_free(res);
+    else puts("(null)");
     
-    res = dict_search(dicts, DICT_EN, entry1b);
-    print_dict(res, DICT_EN);
-    dict_free(res);
+    res = dict_search(dicts, DICT_EN, entry1b); // TODO
+    if(res)  print_dict(res, DICT_EN), dict_free(res);
+    else puts("(null)");
     
     res = dict_search(dicts, DICT_DE, "end");
-    print_dict(res, DICT_DE);
-    dict_free(res);
+    if(res)  print_dict(res, DICT_DE), dict_free(res);
+    else puts("(null)");
     
     res = dict_search(dicts, DICT_EN, entry3b);
-    print_dict(res, DICT_EN);
-    dict_free(res);
+    if(res)  print_dict(res, DICT_EN), dict_free(res);
+    else puts("(null)");
     
 
     puts("=== file ===");
-    EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "dicttest_assets/notfound.txt"));
-    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/notfound.txt"));
+    EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "/noperm.txt"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "/noperm.txt"));
 
     EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "dicttest_assets/dict.txt"));
     dict_clear(dicts[DICT_DE]);

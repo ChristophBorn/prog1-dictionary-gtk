@@ -16,7 +16,7 @@
 /*private*/ void strcpytolower(char* dest, char* src) {
     int i;
     for(i=0; src[i]; i++)  dest[i] = tolower(src[i]);
-    dest[i+1] = 0;
+    dest[i] = 0;
 }
 
 /*private*/ int cmp_de(void* entry1, void* entry2) {
@@ -104,6 +104,9 @@ bool dict_remove(tList** dicts, char* wordDe, char* wordEn) {
 }
 
 tList* dict_search(tList** dicts, int lang, char* query) {
+    char* lquery = malloc(strlen(query) + 1);
+    if(!lquery)  return NULL;
+    
     tList* res = list_create();
     tDEntry* tmp;
     //char* word;
@@ -111,7 +114,7 @@ tList* dict_search(tList** dicts, int lang, char* query) {
     //int i;
 
     //for(i=0; query[i] != 0; i++)  query[i] = tolower(query[i]);
-    strcpytolower(query, query);
+    strcpytolower(lquery, query);
 
     for(tmp = list_get_first(dicts[lang]); tmp; tmp = list_get_next(dicts[lang])) {
         strcpytolower(buf, (lang == DICT_DE ? tmp->wordDe : tmp->wordEn));
@@ -120,9 +123,10 @@ tList* dict_search(tList** dicts, int lang, char* query) {
         buf[i+1] = 0;*/
 
         // word contains query (case insensitive)
-        if(strstr(buf, query))  list_insert_last(res, tmp);
+        if(strstr(buf, lquery))  list_insert_last(res, tmp);
     }
 
+    free(lquery);
     return res;
 }
 
