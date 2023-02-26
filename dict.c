@@ -28,7 +28,7 @@
     strcpytolower(buf2, ((tDEntry*) entry2)->wordDe);
     cmp = strcmp(buf1, buf2);
 
-    if(cmp == 0) {
+    if(cmp == 0) { // english order if equal
         strcpytolower(buf1, ((tDEntry*) entry1)->wordEn);
         strcpytolower(buf2, ((tDEntry*) entry2)->wordEn);
         cmp = strcmp(buf1, buf2);
@@ -45,7 +45,7 @@
     strcpytolower(buf2, ((tDEntry*) entry2)->wordEn);
     cmp = strcmp(buf1, buf2);
 
-    if(cmp == 0) {
+    if(cmp == 0) { // german order if equal
         strcpytolower(buf1, ((tDEntry*) entry1)->wordDe);
         strcpytolower(buf2, ((tDEntry*) entry2)->wordDe);
         cmp = strcmp(buf1, buf2);
@@ -71,8 +71,12 @@ bool dict_insert(tList** dicts, char* wordDe, char* wordEn) {
     strcpy(tmp->wordDe, wordDe);
     strcpy(tmp->wordEn, wordEn);
 
-    if(!list_insert_sorted(dicts[DICT_DE], tmp, cmp_de)
-    || !list_insert_sorted(dicts[DICT_EN], tmp, cmp_en)) {
+    if(!list_insert_sorted(dicts[DICT_DE], tmp, cmp_de)) {
+        free_entry(tmp);
+        return false;
+    }
+    if(!list_insert_sorted(dicts[DICT_EN], tmp, cmp_en)) {
+        dict_remove(dicts, tmp->wordDe, tmp->wordEn);
         free_entry(tmp);
         return false;
     }
@@ -127,7 +131,7 @@ tList* dict_search(tList** dicts, int lang, char* query) {
 /*private*/ void delete_dict(tList* dict, bool freeEnries) {
     tDEntry* tmp;
     for(tmp = list_get_first(dict); tmp; tmp = list_get_next(dict)) {
-        list_remove_prev(dict);
+        list_remove_prev(dict); // list_remove_curr() would make list_get_next() fail
         
         if(freeEnries) free_entry(tmp);
     }
@@ -149,22 +153,37 @@ void dict_free(tList** dicts) {
 }
 
 bool dict_read_file(tList** dicts, char* fname) {
-    char bufDe[DICT_MAX_WORD_LEN+1];
-    char bufEn[DICT_MAX_WORD_LEN+1];
+    char bufDe[DICT_MAX_WORD_LEN+2];
+    char bufEn[DICT_MAX_WORD_LEN+2];
     bool ret = true;
 
     FILE* pf = fopen(fname, "rt");
     if(!pf)  return false;
 
-    while(!feof(pf)) {
-        if(!fgets(bufDe, DICT_MAX_WORD_LEN+1, pf)
-        || !fgets(bufEn, DICT_MAX_WORD_LEN+1, pf))  {
+    while(true) {
+        if(!fgets(bufDe, DICT_MAX_WORD_LEN+2, pf)) {
+            ret = feof(pf); // stop at EOF before entry, otherwise error
+            break;
+        }
+        if(!fgets(bufEn, DICT_MAX_WORD_LEN+2, pf)) {
             ret = false;
             break;
         }
         
+        if((strlen(bufDe) == DICT_MAX_WORD_LEN+1 && bufDe[DICT_MAX_WORD_LEN] != '\n')
+        || (strlen(bufEn) == DICT_MAX_WORD_LEN+1 && bufEn[DICT_MAX_WORD_LEN] != '\n')) {
+            ret = false; // line > DICT_MAX_WORD_LEN
+            break;
+        }
+
+        // Remove line break
         bufDe[strlen(bufDe) - 1] = 0;
-        bufEn[strlen(bufEn) - 1] = 0;
+        if(bufEn[strlen(bufEn) - 1] == '\n')  bufEn[strlen(bufEn) - 1] = 0;
+
+        if(strlen(bufDe) < 1 || strlen(bufEn) < 1) {
+            ret = false; // empty line
+            break;
+        }
 
         if(!dict_insert(dicts, bufDe, bufEn)) {
             ret = false;
@@ -178,22 +197,12 @@ bool dict_read_file(tList** dicts, char* fname) {
 
 bool dict_write_file(tList* dict, char* fname) {
     bool ret = true;
-    bool first = true;
     tDEntry* tmp;
     FILE* pf = fopen(fname, "wt");
     if(!pf)  return false;
 
     for(tmp = list_get_first(dict); tmp; tmp = list_get_next(dict)) {
-        if(first) {
-            first = false;
-        }else{
-            if(fprintf(pf, "\n") < 1) {
-                ret = false;
-                break;
-            }
-        }
-
-        if(fprintf(pf, "%s\n%s", tmp->wordDe, tmp->wordEn) < 1){
+        if(fprintf(pf, "%s\n%s\n", tmp->wordDe, tmp->wordEn) < 4) {
             ret = false;
             break;
         }

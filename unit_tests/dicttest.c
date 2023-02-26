@@ -23,7 +23,7 @@ void print_dict(tList* dict, int lang) {
 }
 
 int main() {
-    char* entryBig = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquya";
+    char* entryBig = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquy";
     char* entry1a = "Mitarbeiter";
     char* entry1b = "employee";
     char* entry2a = "Kartoffelsalat";
@@ -97,7 +97,19 @@ int main() {
     print_dict(dicts[DICT_EN], DICT_EN);
 
     dict_clear(dicts);
-    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid.txt"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid1.txt"));
+    print_dict(dicts[DICT_DE], DICT_DE);
+    puts("");
+    print_dict(dicts[DICT_EN], DICT_EN);
+
+    dict_clear(dicts);
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid2.txt"));
+    print_dict(dicts[DICT_DE], DICT_DE);
+    puts("");
+    print_dict(dicts[DICT_EN], DICT_EN);
+
+    dict_clear(dicts);
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid3.txt"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);

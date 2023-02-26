@@ -84,18 +84,42 @@ aussterbend          | dwindling
 Kartoffelsalat       | potato salad        
 Mitarbeiter          | employee            
 Schwund              | dwindling           
-versiegend           | dwindlin            
+versiegend           | dwindling           
 
 englisch             | deutsch             
 ==================== | ====================
-dwindlin             | versiegend          
 dwindling            | aussterbend         
 dwindling            | Schwund             
+dwindling            | versiegend          
 employee             | Mitarbeiter         
 potato salad         | Kartoffelsalat      
-(dict_read_file(dicts, "dicttest_assets/invalid.txt")) = 0
+(dict_read_file(dicts, "dicttest_assets/invalid1.txt")) = 0
 deutsch              | englisch            
 ==================== | ====================
+Kartoffelsalat       | potato salad        
+Mitarbeiter          | employee            
 
 englisch             | deutsch             
 ==================== | ====================
+employee             | Mitarbeiter         
+potato salad         | Kartoffelsalat      
+(dict_read_file(dicts, "dicttest_assets/invalid2.txt")) = 0
+deutsch              | englisch            
+==================== | ====================
+aussterbend          | dwindling           
+Kartoffelsalat       | potato salad        
+
+englisch             | deutsch             
+==================== | ====================
+dwindling            | aussterbend         
+potato salad         | Kartoffelsalat      
+(dict_read_file(dicts, "dicttest_assets/invalid3.txt")) = 0
+deutsch              | englisch            
+==================== | ====================
+aussterbend          | dwindling           
+Kartoffelsalat       | potato salad        
+
+englisch             | deutsch             
+==================== | ====================
+dwindling            | aussterbend         
+potato salad         | Kartoffelsalat      
