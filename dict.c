@@ -124,17 +124,28 @@ tList* dict_search(tList** dicts, int lang, char* query) {
     return res;
 }
 
-void dict_clear(tList* dict) {
+/*private*/ void delete_dict(tList* dict, bool freeEnries) {
     tDEntry* tmp;
     for(tmp = list_get_first(dict); tmp; tmp = list_get_next(dict)) {
-        free_entry(tmp);
-
-        list_remove_curr(dict);
+        list_remove_prev(dict);
+        
+        if(freeEnries) free_entry(tmp);
     }
+    list_remove_last(dict);
 }
-void dict_free(tList* dict) {
-    dict_clear(dict);
-    list_delete(dict);
+void dict_free_search(tList* resDict) {
+    delete_dict(resDict, false); // can't free tDEntrys since still used by original dicts
+    list_delete(resDict);
+}
+void dict_clear(tList** dicts) {
+    delete_dict(dicts[DICT_DE], false); // tDEntrys can only be freed once for both dicts!
+    delete_dict(dicts[DICT_EN], true);
+}
+void dict_free(tList** dicts) {
+    dict_clear(dicts);
+
+    list_delete(dicts[DICT_DE]);
+    list_delete(dicts[DICT_EN]);
 }
 
 bool dict_read_file(tList** dicts, char* fname) {

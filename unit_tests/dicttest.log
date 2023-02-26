@@ -73,3 +73,29 @@ englisch             | deutsch
 dwindling            | aussterbend         
 dwindling            | Schwund             
 dwindling            | versiegend          
+=== file ===
+(dict_write_file(dicts[DICT_DE], "/noperm.txt")) = 0
+(dict_read_file(dicts, "/noperm.txt")) = 0
+(dict_write_file(dicts[DICT_DE], "dicttest_assets/dict.txt")) = 1
+(dict_read_file(dicts, "dicttest_assets/dict.txt")) = 1
+deutsch              | englisch            
+==================== | ====================
+aussterbend          | dwindling           
+Kartoffelsalat       | potato salad        
+Mitarbeiter          | employee            
+Schwund              | dwindling           
+versiegend           | dwindlin            
+
+englisch             | deutsch             
+==================== | ====================
+dwindlin             | versiegend          
+dwindling            | aussterbend         
+dwindling            | Schwund             
+employee             | Mitarbeiter         
+potato salad         | Kartoffelsalat      
+(dict_read_file(dicts, "dicttest_assets/invalid.txt")) = 0
+deutsch              | englisch            
+==================== | ====================
+
+englisch             | deutsch             
+==================== | ====================

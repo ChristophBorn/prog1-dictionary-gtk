@@ -18,7 +18,7 @@ void print_dict(tList* dict, int lang) {
             "%-20s | %-20s\n",
             (lang == DICT_DE ? tmp->wordDe : tmp->wordEn),
             (lang != DICT_DE ? tmp->wordDe : tmp->wordEn)
-        );    
+        );
     }
 }
 
@@ -67,22 +67,22 @@ int main() {
 
     puts("=== search ===");
     EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_DE, entry1b));
-    if(res)  print_dict(res, DICT_DE), dict_free(res);
+    if(res)  print_dict(res, DICT_DE), dict_free_search(res);
 
     EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_EN, entry1a));
-    if(res)  print_dict(res, DICT_EN), dict_free(res);
+    if(res)  print_dict(res, DICT_EN), dict_free_search(res);
     
     EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_DE, entry1a));
-    if(res)  print_dict(res, DICT_DE), dict_free(res);
+    if(res)  print_dict(res, DICT_DE), dict_free_search(res);
     
     EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_EN, entry1b));
-    if(res)  print_dict(res, DICT_EN), dict_free(res);
+    if(res)  print_dict(res, DICT_EN), dict_free_search(res);
     
     EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_DE, "end"));
-    if(res)  print_dict(res, DICT_DE), dict_free(res);
+    if(res)  print_dict(res, DICT_DE), dict_free_search(res);
     
     EVAL_POINTER_EXPR(res = dict_search(dicts, DICT_EN, entry3b));
-    if(res)  print_dict(res, DICT_EN), dict_free(res);
+    if(res)  print_dict(res, DICT_EN), dict_free_search(res);
     
 
     puts("=== file ===");
@@ -90,22 +90,19 @@ int main() {
     EVAL_INT_EXPR(dict_read_file(dicts, "/noperm.txt"));
 
     EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "dicttest_assets/dict.txt"));
-    dict_clear(dicts[DICT_DE]);
-    dict_clear(dicts[DICT_EN]);
+    dict_clear(dicts);
     EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/dict.txt"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
-    dict_clear(dicts[DICT_DE]);
-    dict_clear(dicts[DICT_EN]);
+    dict_clear(dicts);
     EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid.txt"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
-    dict_free(dicts[DICT_DE]);
-    dict_free(dicts[DICT_EN]);
+    dict_free(dicts);
 
     return 0;
 }
