@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Author: Christoph Born (53034, 22/041/62)
+# script to compile & run unit test
+# tests succeed if output matches expected & validated output
+
 cd unit_tests &> /dev/null
 
 if [ $# -lt 1 ]
@@ -22,8 +26,9 @@ code=$?
 
 if [ $code -ne 0 ]
 then
-    echo "finished with code: $code"
+    echo "test finished with code: $code"
     exit $code
 fi
 
 diff -s -c10 $1.log $1-expected.log
+exit $?

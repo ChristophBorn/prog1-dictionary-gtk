@@ -1,8 +1,6 @@
-/*
-    AUTHOR
-    Dictionary utility functions
-    requires #include <stdbool.h>
-*/
+// Author: Christoph Born (53034, 22/041/62)
+// Module dict: for managing dictionary & entry data
+// requires #include <stdbool.h> !
 
 // === data structures ===
 typedef struct {

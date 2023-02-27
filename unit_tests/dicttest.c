@@ -1,8 +1,12 @@
+// Author: Christoph Born (53034, 22/041/62)
+// unit test for module dict
+// see runtest.sh
+
 #include <stdio.h>
 #include <stdbool.h>
-#include "unit_test.h"
 #include "../list.h"
 #include "../dict.h"
+#include "unit_test.h"
 
 void print_dict(tList* dict, int lang) {
     tDEntry* tmp;

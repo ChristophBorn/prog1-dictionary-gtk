@@ -1,8 +1,12 @@
+// Author: Christoph Born (53034, 22/041/62)
+// unit test for module list
+// see runtest.sh
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include "unit_test.h"
 #include "../list.h"
+#include "unit_test.h"
 
 int compare(void* str1, void* str2) {
     return strcmp((char*) str1, (char*) str2);

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Author: Christoph Born (53034, 22/041/62)
+# compilation script for application
+
 commitid=$(git rev-parse --short HEAD 2>/dev/null)
 if [ $? -eq 0 ] # git is present
 then

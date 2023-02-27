@@ -1,3 +1,6 @@
+// Author: Christoph Born (53034, 22/041/62)
+// Module dict: for managing dictionary & entry data
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

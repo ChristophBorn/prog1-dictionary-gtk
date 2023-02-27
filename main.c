@@ -1,14 +1,21 @@
+// Author: Christoph Born (53034, 22/041/62)
+// main module
+
 #include <gtk/gtk.h>
 #include <stdbool.h>
 #include <string.h>
 #include "list.h"
 #include "dict.h"
 
+#include "main.h"
+
+// application data
 tList *dicts[2];
 char* filename;
 int lastLang = DICT_DE;
 bool dataChanged = false; // since last save
 
+// GUI components
 GtkWindow* appWindow;
 GtkTreeView* treeView;
 GtkListStore* liststoreDict;
@@ -32,13 +39,13 @@ int confirm_dialog(char* question, char* arg1, char* arg2) {
     gtk_widget_destroy(dialog);
     return response;
 }
-void error_dialog(char* msg, char* filename, char* secondary) {
+void error_dialog(char* msg, char* arg1, char* secondary) {
     GtkWidget* dialog = gtk_message_dialog_new(
         appWindow,
         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
         GTK_MESSAGE_ERROR,
         GTK_BUTTONS_OK,
-        msg, filename
+        msg, arg1
     );
 
     if(secondary)
@@ -68,7 +75,7 @@ void about_dialog() {
     return;
 }
 
-bool choose_file(char* title, char* btnTitle, int action /*Gtk.FileChooserAction*/) { // false = aborted
+bool choose_file(char* title, char* btnTitle, int action) {
     char* dir;
     GtkFileChooser *chooser;
     GtkFileFilter* filterDict = gtk_file_filter_new();
@@ -82,7 +89,6 @@ bool choose_file(char* title, char* btnTitle, int action /*Gtk.FileChooserAction
     NULL);
 
     gtk_file_filter_set_name(filterDict, "Wörterbuch-Datei (.txt)");
-    //gtk_file_filter_add_mime_type(filter, "text/plain");
     gtk_file_filter_add_pattern(filterDict, "*.txt");
 
     gtk_file_filter_set_name(filterAny, "Alle Formate");
@@ -137,7 +143,7 @@ void file_save() {
     dataChanged = false;
 }
 
-bool file_check_unsaved() { // false = X clicked, abort action
+bool file_check_unsaved() {
     int response;
     
     if(!dataChanged)  return true;

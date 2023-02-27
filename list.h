@@ -1,8 +1,7 @@
-/*
-    AUTHOR
-    Doppelt verkette Ringliste
-    requires #include <stdbool.h>
-*/
+// Author: Christoph Born (53034, 22/041/62)
+// Module list: Circular Doubly Linked List, for use in module dict
+// based on https://www.informatik.htw-dresden.de/~beck/PSPI/DownloadPraktikum/list/list.h
+// requires #include <stdbool.h> !
 
 // === data structures ===
 typedef struct lcnct {

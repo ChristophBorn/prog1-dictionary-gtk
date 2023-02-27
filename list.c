@@ -1,3 +1,6 @@
+// Author: Christoph Born (53034, 22/041/62)
+// Module list: Circular Doubly Linked List, for use in module dict
+
 #include <stdlib.h>
 #include <stdbool.h>
 
