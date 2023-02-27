@@ -22,7 +22,7 @@ typedef struct {
 
 bool dict_insert(tList** dicts, char* wordDe, char* wordEn); // inserts entry, mind DICT_MAX_WORD_LEN!
 bool dict_remove(tList** dicts, char* wordDe, char* wordEn); // removes entry, returns false if not found
-tList* dict_search(tList** dicts, int lang, char* query); // returns dict of all entries that contain query in given languageor NULL on error, dict_free_search after use!
+tList* dict_search(tList** dicts, int lang, char* query); // returns dict of all entries that contain query in given language or NULL on error, dict_free_search after use!
 void dict_free_search(tList* resDict);
 void dict_clear(tList** dicts); // removes all entries, don't access search results generated from these entries afterwards!
 void dict_free(tList** dicts); // releases memory occupied by dicts (and content), execute on program exit! Don't access search results generated from these dicts afterwards!
