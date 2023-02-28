@@ -33,8 +33,8 @@
     // int > 0 if entry2 comes before entry1 in alphabet
     // on equality, english words are compared & 0 is only returned if both languages match
     int cmp;
-    char buf1[DICT_MAX_WORD_LEN+1];
-    char buf2[DICT_MAX_WORD_LEN+1];
+    char buf1[DICT_MAX_WORD_LEN+1]; // dynamic allocation contrary because that
+    char buf2[DICT_MAX_WORD_LEN+1]; // would require another possible return value
 
     strcpytolower(buf1, ((tDEntry*) entry1)->wordDe);
     strcpytolower(buf2, ((tDEntry*) entry2)->wordDe);
@@ -54,8 +54,8 @@
     // int > 0 if entry2 comes before entry1 in alphabet
     // on equality, german words are compared & 0 is only returned if both languages match
     int cmp;
-    char buf1[DICT_MAX_WORD_LEN+1];
-    char buf2[DICT_MAX_WORD_LEN+1];
+    char buf1[DICT_MAX_WORD_LEN+1]; // dynamic allocation contrary because that
+    char buf2[DICT_MAX_WORD_LEN+1]; // would require another possible return value
 
     strcpytolower(buf1, ((tDEntry*) entry1)->wordEn);
     strcpytolower(buf2, ((tDEntry*) entry2)->wordEn);
@@ -122,22 +122,23 @@ bool dict_remove(tList** dicts, char* wordDe, char* wordEn) {
     return true;
 }
 
-// ====== dict maintainance & search ======
+// ====== dict maintenance & search ======
 tList* dict_search(tList** dicts, int lang, char* query) {
-    char* lquery = malloc(strlen(query) + 1);
-    if(!lquery)  return NULL;
-    
     tList* res = list_create();
     tDEntry* tmp;
-    char buf[DICT_MAX_WORD_LEN+1]; // makes more sense here, because realloc() would be requiered for every entry
+    char buf[DICT_MAX_WORD_LEN+1]; // makes more sense here, because realloc() would be required for every entry
+    char* lquery = malloc(strlen(query) + 1);
+    if(!lquery)  return NULL;
 
-    strcpytolower(lquery, query);
+    if(res) {
+        strcpytolower(lquery, query);
 
-    for(tmp = list_get_first(dicts[lang]); tmp; tmp = list_get_next(dicts[lang])) {
-        strcpytolower(buf, (lang == DICT_DE ? tmp->wordDe : tmp->wordEn));
+        for(tmp = list_get_first(dicts[lang]); tmp; tmp = list_get_next(dicts[lang])) {
+            strcpytolower(buf, (lang == DICT_DE ? tmp->wordDe : tmp->wordEn));
 
-        // word contains query (case insensitive)
-        if(strstr(buf, lquery))  list_insert_last(res, tmp);
+            // word contains query (case insensitive)
+            if(strstr(buf, lquery))  list_insert_last(res, tmp);
+        }
     }
 
     free(lquery);
@@ -146,7 +147,7 @@ tList* dict_search(tList** dicts, int lang, char* query) {
 
 /*private*/ void delete_dict(tList* dict, bool freeEntries) {
     // removes all elements from list 'dict'
-    // if freeEntries == true, the tDEntrys refered to are also freed
+    // if freeEntries == true, the tDEntrys referred to are also freed
     tDEntry* tmp;
     for(tmp = list_get_first(dict); tmp; tmp = list_get_next(dict)) {
         list_remove_prev(dict); // list_remove_curr() would make list_get_next() fail

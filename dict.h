@@ -17,10 +17,11 @@ typedef struct {
 
 /* In all functions below, tList** dicts is expected to be tList *dicts[2],
    consisting of dicts[DICT_DE] and dicts[DICT_EN] (lists of tDEntry).
-   Example initalization (#include "list.h"): tList *dicts[2] = {list_create(), list_create()};
+   Example initialization (#include "list.h"): tList *dicts[2] = {list_create(), list_create()};
+     Dont forget to check whether one of then is NULL (= error)!
    Alphabetical order of dicts[DICT_DE] and dicts[DICT_EN] (in respective language)
      is established and preserved by the functions below.
-   Iterate thorugh the respective list and access the tDEntry's attributes
+   Iterate through the respective list and access the tDEntry's attributes
      to get the contents in german or english alphabetical order.
 */
 
@@ -36,7 +37,7 @@ bool dict_remove(tList** dicts, char* wordDe, char* wordEn);
    - wordDe & wordEn are text of the entry to remove
    - returns false if no such entry was found, true otherwise */
 
-// ====== dict maintainance & search ======
+// ====== dict maintenance & search ======
 
 tList* dict_search(tList** dicts, int lang, char* query);
 /* returns dict (single list) of all entries that contain query in given language

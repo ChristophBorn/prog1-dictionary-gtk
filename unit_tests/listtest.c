@@ -1,6 +1,7 @@
 // Author: Christoph Born (53034, 22/041/62)
 // unit test for module list
 // see runtest.sh (cmd: unit_tests/runtest.sh listtest)
+//  and listtest-expected.log for expected output
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -9,17 +10,21 @@
 #include "unit_test.h"
 
 int compare(void* str1, void* str2) {
+    // wrapper for strcmp(str1, str2): to return int <0 if str1 is alphabetically before str2, ...
     return strcmp((char*) str1, (char*) str2);
 }
 int compare_rev(void* str1, void* str2) {
+    // wrapper for strcmp(str1, str2) with reversed sign
     return compare(str1, str2) * -1;
 }
 
 bool print_entry(tList* pList, void* entry, int i) {
+    // prints given entry and i (index) as string & returns true (pList unused)
     printf("(%d) %s, ", i, (char*) entry);
     return true;
 }
 void print_list(tList* pList) {
+    // prints all entries of pList into one line
     list_foreach(pList, print_entry);
     puts("");
 }
@@ -32,8 +37,13 @@ int main() {
     char* textE = "Perry";
     char* tmp;
 
-    tList* pList = list_create();
+    tList* pList;
 
+    // test list_create()
+    EVAL_POINTER_EXPR(pList = list_create());
+    if(!pList)  return 1;
+
+    // test list_insert_first() & list_insert_last()
     puts("=== insert1 ===");
     EVAL_INT_EXPR(list_insert_first(pList, textA));
     EVAL_INT_EXPR(list_insert_first(pList, textB));
@@ -41,7 +51,8 @@ int main() {
     EVAL_INT_EXPR(list_insert_last(pList, textD));
     EVAL_INT_EXPR(list_insert_last(pList, textE));
 
-    puts("=== get separate ===");
+    // test list_get_curr(), list_get_prev(), list_get_next(), list_get_first(), list_get_last() & list_get_at()
+    puts("=== get single ===");
     EVAL_STRING_EXPR((char*) list_get_curr(pList));
     EVAL_STRING_EXPR((char*) list_get_prev(pList));
     EVAL_STRING_EXPR((char*) list_get_next(pList));
@@ -53,6 +64,7 @@ int main() {
     EVAL_STRING_EXPR((char*) list_get_at(pList, 2));
     EVAL_STRING_EXPR((char*) list_get_at(pList, 4));
 
+    // test iterating using list_get_first(), list_get_next() / list_get_last(), list_get_prev()
     puts("=== get loop forwards ===");
     for(tmp = list_get_first(pList); tmp; tmp = list_get_next(pList)) {
         printf("%s\n", tmp);
@@ -63,6 +75,7 @@ int main() {
         printf("%s\n", tmp);
     }
 
+    // test list_delete(), list_remove_curr(), list_remove_prev(), list_remove_next(), list_remove_first() & list_remove_last()
     puts("=== remove1 ===");
     EVAL_INT_EXPR(list_delete(pList));
 
@@ -83,9 +96,10 @@ int main() {
 
     EVAL_INT_EXPR(list_delete(pList));
 
-
+    // test list_insert_before(), list_insert_behind() & removal loop
     puts("=== insert2 ===");
-    pList = list_create();
+    EVAL_POINTER_EXPR(pList = list_create());
+    if(!pList)  return 1;
 
     EVAL_INT_EXPR(list_insert_before(pList, textA));
     EVAL_INT_EXPR(list_insert_behind(pList, textB));
@@ -107,9 +121,10 @@ int main() {
 
     EVAL_INT_EXPR(list_delete(pList));
 
-
+    // test list_insert_sorted() using compare()
     puts("=== insert sorted ===");
-    pList = list_create();
+    EVAL_POINTER_EXPR(pList = list_create());
+    if(!pList)  return 1;
 
     EVAL_INT_EXPR(list_insert_sorted(pList, textA, compare));
     EVAL_INT_EXPR(list_insert_sorted(pList, textB, compare));
@@ -127,9 +142,10 @@ int main() {
 
     EVAL_INT_EXPR(list_delete(pList));
 
-
+    // test list_insert_sorted() using compare_rev()
     puts("=== insert sorted reverse ===");
-    pList = list_create();
+    EVAL_POINTER_EXPR(pList = list_create());
+    if(!pList)  return 1;
 
     EVAL_INT_EXPR(list_insert_sorted(pList, textA, compare_rev));
     EVAL_INT_EXPR(list_insert_sorted(pList, textB, compare_rev));

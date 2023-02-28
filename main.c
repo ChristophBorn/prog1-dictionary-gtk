@@ -10,7 +10,7 @@
 
 #include "main.h"
 
-// application data
+// application state data
 tList *dicts[2];
 char* filename;
 int lastLang = DICT_DE;
@@ -91,25 +91,28 @@ bool choose_file(char* title, char* btnTitle, int action) {
         btnTitle, GTK_RESPONSE_ACCEPT,
     NULL);
 
+    // Prepare file filters
     gtk_file_filter_set_name(filterDict, "Wörterbuch-Datei (.dict)");
     gtk_file_filter_add_pattern(filterDict, "*.dict");
 
     gtk_file_filter_set_name(filterAny, "Alle Formate");
     gtk_file_filter_add_pattern(filterAny, "*");
 
+    // Prepare other settings
     chooser = GTK_FILE_CHOOSER(dialog);
     gtk_file_chooser_add_filter(chooser, filterDict);
     gtk_file_chooser_add_filter(chooser, filterAny);
     gtk_file_chooser_set_do_overwrite_confirmation(chooser, true);
-    if(action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    if(action == GTK_FILE_CHOOSER_ACTION_SAVE) // suggest filename
         gtk_file_chooser_set_current_name(chooser, "my.dict");
 
-    if(filename) {
+    if(filename) { // open directory if currently opened file
         dir = g_path_get_dirname(filename);
         gtk_file_chooser_set_current_folder(chooser, dir);
         g_free(dir);
     }
 
+    // Run dialog
     int res = gtk_dialog_run(GTK_DIALOG(dialog));
     if(res == GTK_RESPONSE_ACCEPT) {
         g_free(filename);
@@ -141,6 +144,7 @@ bool file_check_unsaved() {
         "Möchten Sie Ihre Änderungen an %s zuvor speichern?", filename, NULL
     );
     if(response != GTK_RESPONSE_YES)  return (response == GTK_RESPONSE_NO);
+    //                                        false -> GTK_RESPONSE_DELETE_EVENT
     
     file_save();
     return true;
@@ -159,11 +163,12 @@ void file_open() {
             "Bitte stellen Sie sicher, \n"
             "- dass Sie die Schreibberechtigung für diese Datei besitzen\n"
             "- und es tatsächlich eine Wörterbuch-Datei dieses Programms ist"
-            " (Format Dateiinhalt)\n"
+             " (passendes Format Dateiinhalt)\n"
             "und versuchen Sie es anschließend erneut."
         );
     }
     
+    // even on error dicts now contains the readable entries from the file
     dataChanged = false;
     display_entries(dicts[lastLang], lastLang);
 }
@@ -172,7 +177,8 @@ void file_new() {
     
     if(!file_check_unsaved())  return;
 
-    if(!choose_file("Wörterbuch-Datei erstellen", "Erstellen", GTK_FILE_CHOOSER_ACTION_SAVE))  return;
+    if(!choose_file("Wörterbuch-Datei erstellen", "Erstellen", GTK_FILE_CHOOSER_ACTION_SAVE))
+        return;
 
     // write test
     pf = fopen(filename, "wt");
@@ -221,8 +227,6 @@ void display_entries(tList* dict, int lang) {
     tDEntry* tmp;
 
     lastLang = lang;
-
-    // TODO swap colums?
 
     gtk_list_store_clear(liststoreDict);
 
@@ -345,22 +349,34 @@ void entry_remove() {
 // ====== initialization & termination ======
 int main(int argc, char* argv[]) {
     GtkBuilder* builder;
+    int builderStatus;
 
     gtk_init(&argc, &argv);
 
     // Load GUI from beleg-prog1.glade
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "beleg-prog1.glade", NULL);
-    gtk_builder_connect_signals(builder, NULL);
-    appWindow = GTK_WINDOW(gtk_builder_get_object(builder, "app"));
-    treeView = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeView"));
-    liststoreDict = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststoreDict"));
-    searchEntry = GTK_ENTRY(gtk_builder_get_object(builder, "searchEntry"));
-    cBoxSearchLang = GTK_COMBO_BOX(gtk_builder_get_object(builder, "cBoxSearchLang"));
-    dialogAdd = GTK_WIDGET(gtk_builder_get_object(builder, "dialogAdd"));
-    entryAddDe = GTK_ENTRY(gtk_builder_get_object(builder, "entryAddDe"));
-    entryAddEn = GTK_ENTRY(gtk_builder_get_object(builder, "entryAddEn"));
+    builderStatus = gtk_builder_add_from_file(builder, "beleg-prog1.glade", NULL);
+    if(builderStatus) {
+        gtk_builder_connect_signals(builder, NULL);
+        appWindow = GTK_WINDOW(gtk_builder_get_object(builder, "app"));
+        treeView = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeView"));
+        liststoreDict = GTK_LIST_STORE(gtk_builder_get_object(builder, "liststoreDict"));
+        searchEntry = GTK_ENTRY(gtk_builder_get_object(builder, "searchEntry"));
+        cBoxSearchLang = GTK_COMBO_BOX(gtk_builder_get_object(builder, "cBoxSearchLang"));
+        dialogAdd = GTK_WIDGET(gtk_builder_get_object(builder, "dialogAdd"));
+        entryAddDe = GTK_ENTRY(gtk_builder_get_object(builder, "entryAddDe"));
+        entryAddEn = GTK_ENTRY(gtk_builder_get_object(builder, "entryAddEn"));
+    }
     g_object_unref(G_OBJECT(builder));
+    if(!builderStatus) {
+        error_dialog(
+            "Layout-Definition konnte nicht geladen werden.",
+            NULL,
+            "beleg-prog1.glade muss im selben Verzeichnis wie das compiliertes Binärimage liegen und lesbar sein.\n"
+            "Applikation wird beendet."
+            );
+        return 1;
+    }
 
     // Prepare GUI
     gtk_entry_set_max_length(searchEntry, DICT_MAX_WORD_LEN);
@@ -370,6 +386,10 @@ int main(int argc, char* argv[]) {
     // Prepare data structure
     dicts[DICT_DE] = list_create();
     dicts[DICT_EN] = list_create();
+    if(!dicts[DICT_DE] || !dicts[DICT_EN]) {
+        error_dialog("Konnte nicht ausreichend Speicher abrufen.", NULL, "Applikation wird beendet.");
+        return 2;
+    }
     
     // Enter GUI main loop
     gtk_main();

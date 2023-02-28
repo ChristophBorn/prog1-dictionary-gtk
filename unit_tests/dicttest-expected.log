@@ -1,13 +1,13 @@
 === insert ===
-(dict_insert(dicts, entryBig, entry1b)) = 0
-(dict_insert(dicts, entry1a, entryBig)) = 0
-(dict_insert(dicts, entry1a, entry1b)) = 1
-(dict_insert(dicts, entry1a, entry1b)) = 1
-(dict_insert(dicts, entry2a, entry2b)) = 1
-(dict_insert(dicts, entry3a, entry3b)) = 1
-(dict_insert(dicts, entry4, entry3b)) = 1
-(dict_insert(dicts, entry5, entry3b)) = 1
-(dict_insert(dicts, entry6, entry3b)) = 1
+(dict_insert(dicts, entryBig, entry1en)) = 0
+(dict_insert(dicts, entry1de, entryBig)) = 0
+(dict_insert(dicts, entry1de, entry1en)) = 1
+(dict_insert(dicts, entry1de, entry1en)) = 1
+(dict_insert(dicts, entry2de, entry2en)) = 1
+(dict_insert(dicts, entry3de, entry3en)) = 1
+(dict_insert(dicts, entry4de, entry3en)) = 1
+(dict_insert(dicts, entry5de, entry3en)) = 1
+(dict_insert(dicts, entry6de, entry3en)) = 1
 === list ===
 deutsch              | englisch            
 ==================== | ====================
@@ -29,9 +29,9 @@ employee             | Mitarbeiter
 employee             | Mitarbeiter         
 potato salad         | Kartoffelsalat      
 === remove ===
-(dict_remove(dicts, entry1a, entry2b)) = 0
-(dict_remove(dicts, entry1a, entry1b)) = 1
-(dict_remove(dicts, entry3a, entry3b)) = 1
+(dict_remove(dicts, entry1de, entry2en)) = 0
+(dict_remove(dicts, entry1de, entry1en)) = 1
+(dict_remove(dicts, entry3de, entry3en)) = 1
 deutsch              | englisch            
 ==================== | ====================
 aussterbend          | dwindling           
@@ -48,17 +48,17 @@ dwindling            | versiegend
 employee             | Mitarbeiter         
 potato salad         | Kartoffelsalat      
 === search ===
-(res = dict_search(dicts, DICT_DE, entry1b)) = (valid pointer)
+(res = dict_search(dicts, DICT_DE, entry1en)) = (valid pointer)
 deutsch              | englisch            
 ==================== | ====================
-(res = dict_search(dicts, DICT_EN, entry1a)) = (valid pointer)
+(res = dict_search(dicts, DICT_EN, entry1de)) = (valid pointer)
 englisch             | deutsch             
 ==================== | ====================
-(res = dict_search(dicts, DICT_DE, entry1a)) = (valid pointer)
+(res = dict_search(dicts, DICT_DE, entry1de)) = (valid pointer)
 deutsch              | englisch            
 ==================== | ====================
 Mitarbeiter          | employee            
-(res = dict_search(dicts, DICT_EN, entry1b)) = (valid pointer)
+(res = dict_search(dicts, DICT_EN, entry1en)) = (valid pointer)
 englisch             | deutsch             
 ==================== | ====================
 employee             | Mitarbeiter         
@@ -67,15 +67,15 @@ deutsch              | englisch
 ==================== | ====================
 aussterbend          | dwindling           
 versiegend           | dwindling           
-(res = dict_search(dicts, DICT_EN, entry3b)) = (valid pointer)
+(res = dict_search(dicts, DICT_EN, entry3en)) = (valid pointer)
 englisch             | deutsch             
 ==================== | ====================
 dwindling            | aussterbend         
 dwindling            | Schwund             
 dwindling            | versiegend          
 === file ===
-(dict_write_file(dicts[DICT_DE], "/noperm.dict")) = 0
-(dict_read_file(dicts, "/noperm.dict")) = 0
+(dict_write_file(dicts[DICT_DE], "/nopermission.dict")) = 0
+(dict_read_file(dicts, "/nopermission.dict")) = 0
 (dict_write_file(dicts[DICT_DE], "dicttest_assets/test.dict")) = 1
 (dict_read_file(dicts, "dicttest_assets/test.dict")) = 1
 deutsch              | englisch            

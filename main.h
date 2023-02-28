@@ -18,12 +18,12 @@ void error_dialog(char* msg, char* arg1, char* secondary);
 
 void about_dialog();
 /* shows dialog with info about the application (blocking)
-   - callback fucntion for Hilfe > Info */
+   - callback function for Hilfe > Info */
 
 // ====== file handling ======
 
 bool choose_file(char* title, char* btnTitle, int action);
-/* shows filechooser dialog (blocking) & sets chosen file as global 'filename'
+/* shows file chooser-dialog (blocking) & sets chosen file as global 'filename'
    - title is dialog's window title
    - btnTitle is text to show on accept button, e.g., 'Save' or 'Open'
    - action is either GTK_FILE_CHOOSER_ACTION_OPEN or GTK_FILE_CHOOSER_ACTION_SAVE
@@ -41,12 +41,12 @@ bool file_check_unsaved();
 void file_open();
 /* lets user choose file & opens it (sets global 'filename')
    - loads file contents (into global 'dicts') & displays entries
-   - on error, partitial content may be loaded & displayed
+   - on error, partial content may be loaded & displayed
    - callback function for Datei > Öffnen */
 
 void file_new();
 /* lets user choose file, creates & opens it (sets global 'filename')
-   - clears global 'dicts' & displays entries (none)
+   - clears global 'dicts' & table (GtkTreeView) (if chosen file is writable)
    - callback function for Datei > Neu */
 
 
@@ -63,7 +63,7 @@ void file_saveas();
 
 void display_entries(tList* dict, int lang);
 /* displays entries of 'dict' in table (GtkTreeView)
-   - lang is saved as global 'lastLang' to determine display order, e.g., after search ends */
+   - lang is saved as global 'lastLang' to resume display order, e.g., after search ends */
 
 
 void sort_de();
@@ -95,7 +95,7 @@ void entry_remove();
 // ====== initialization & termination ======
 
 void quit_app();
-/* - hows confirmation dialog (blocking) & saves unsaved changes if wantend
+/* - shows confirmation dialog (blocking) & saves unsaved changes if wanted
    - frees dynamically allocated application data
    - quits application
    - callback function for Datei > Beenden

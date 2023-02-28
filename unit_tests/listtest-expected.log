@@ -1,10 +1,11 @@
+(pList = list_create()) = (valid pointer)
 === insert1 ===
 (list_insert_first(pList, textA)) = 1
 (list_insert_first(pList, textB)) = 1
 (list_insert_last(pList, textC)) = 1
 (list_insert_last(pList, textD)) = 1
 (list_insert_last(pList, textE)) = 1
-=== get separate ===
+=== get single ===
 ((char*) list_get_curr(pList)) = (null)
 ((char*) list_get_prev(pList)) = (null)
 ((char*) list_get_next(pList)) = (null)
@@ -44,6 +45,7 @@ Olaf
 (list_remove_last(pList)) = 0
 (list_delete(pList)) = 1
 === insert2 ===
+(pList = list_create()) = (valid pointer)
 (list_insert_before(pList, textA)) = 0
 (list_insert_behind(pList, textB)) = 0
 ((char*) list_get_first(pList)) = (null)
@@ -64,6 +66,7 @@ Ulrike
 (list_remove_first(pList)) = 0
 (list_delete(pList)) = 1
 === insert sorted ===
+(pList = list_create()) = (valid pointer)
 (list_insert_sorted(pList, textA, compare)) = 1
 (list_insert_sorted(pList, textB, compare)) = 1
 ((char*) list_get_first(pList)) = Olaf
@@ -82,6 +85,7 @@ Ulrike
 (list_remove_first(pList)) = 0
 (list_delete(pList)) = 1
 === insert sorted reverse ===
+(pList = list_create()) = (valid pointer)
 (list_insert_sorted(pList, textA, compare_rev)) = 1
 (list_insert_sorted(pList, textB, compare_rev)) = 1
 ((char*) list_get_first(pList)) = Richard
