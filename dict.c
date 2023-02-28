@@ -10,19 +10,28 @@
 
 #include "dict.h"
 
+// ====== misc utility functions known to this module only ======
 /*private*/ void free_entry(tDEntry* entry) {
+    // frees memory occupied by entry (including strings contained)
     free(entry->wordDe);
     free(entry->wordEn);
     free(entry);
 }
 
 /*private*/ void strcpytolower(char* dest, char* src) {
+    // copies a string (analog to strcpy),
+    // but thereby converts each char to its lowercase equivalent
     int i;
     for(i=0; src[i]; i++)  dest[i] = tolower(src[i]);
     dest[i] = 0;
 }
 
+// ====== entry manipulation ======
 /*private*/ int cmp_de(void* entry1, void* entry2) {
+    // compares two tDEntrys by german word (case-insensitive)
+    // returns int < 0 if entry1 comes before entry2 in alphabet,
+    // int > 0 if entry2 comes before entry1 in alphabet
+    // on equality, english words are compared & 0 is only returned if both languages match
     int cmp;
     char buf1[DICT_MAX_WORD_LEN+1];
     char buf2[DICT_MAX_WORD_LEN+1];
@@ -40,6 +49,10 @@
     return cmp;
 }
 /*private*/ int cmp_en(void* entry1, void* entry2) {
+    // compares two tDEntrys by english word (case-insensitive)
+    // returns int < 0 if entry1 comes before entry2 in alphabet,
+    // int > 0 if entry2 comes before entry1 in alphabet
+    // on equality, german words are compared & 0 is only returned if both languages match
     int cmp;
     char buf1[DICT_MAX_WORD_LEN+1];
     char buf2[DICT_MAX_WORD_LEN+1];
@@ -56,7 +69,6 @@
 
     return cmp;
 }
-
 bool dict_insert(tList** dicts, char* wordDe, char* wordEn) {
     if(strlen(wordDe) > DICT_MAX_WORD_LEN
     || strlen(wordEn) > DICT_MAX_WORD_LEN)  return false;
@@ -110,13 +122,14 @@ bool dict_remove(tList** dicts, char* wordDe, char* wordEn) {
     return true;
 }
 
+// ====== dict maintainance & search ======
 tList* dict_search(tList** dicts, int lang, char* query) {
     char* lquery = malloc(strlen(query) + 1);
     if(!lquery)  return NULL;
     
     tList* res = list_create();
     tDEntry* tmp;
-    char buf[DICT_MAX_WORD_LEN+1];
+    char buf[DICT_MAX_WORD_LEN+1]; // makes more sense here, because realloc() would be requiered for every entry
 
     strcpytolower(lquery, query);
 
@@ -131,12 +144,14 @@ tList* dict_search(tList** dicts, int lang, char* query) {
     return res;
 }
 
-/*private*/ void delete_dict(tList* dict, bool freeEnries) {
+/*private*/ void delete_dict(tList* dict, bool freeEntries) {
+    // removes all elements from list 'dict'
+    // if freeEntries == true, the tDEntrys refered to are also freed
     tDEntry* tmp;
     for(tmp = list_get_first(dict); tmp; tmp = list_get_next(dict)) {
         list_remove_prev(dict); // list_remove_curr() would make list_get_next() fail
         
-        if(freeEnries) free_entry(tmp);
+        if(freeEntries) free_entry(tmp);
     }
     list_remove_last(dict);
 }
@@ -155,6 +170,7 @@ void dict_free(tList** dicts) {
     list_delete(dicts[DICT_EN]);
 }
 
+// ====== file operations ======
 bool dict_read_file(tList** dicts, char* fname) {
     char bufDe[DICT_MAX_WORD_LEN+2];
     char bufEn[DICT_MAX_WORD_LEN+2];

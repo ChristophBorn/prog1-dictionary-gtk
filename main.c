@@ -1,5 +1,6 @@
 // Author: Christoph Born (53034, 22/041/62)
-// main module
+// main module (handles GUI)
+// compile using buildcmd.sh
 
 #include <gtk/gtk.h>
 #include <stdbool.h>
@@ -25,6 +26,7 @@ GtkWidget* dialogAdd;
 GtkEntry* entryAddDe;
 GtkEntry* entryAddEn;
 
+// ====== dialogs ======
 int confirm_dialog(char* question, char* arg1, char* arg2) {
     int response;    
     GtkWidget* dialog = gtk_message_dialog_new(
@@ -75,6 +77,7 @@ void about_dialog() {
     return;
 }
 
+// ====== file handling ======
 bool choose_file(char* title, char* btnTitle, int action) {
     char* dir;
     GtkFileChooser *chooser;
@@ -88,8 +91,8 @@ bool choose_file(char* title, char* btnTitle, int action) {
         btnTitle, GTK_RESPONSE_ACCEPT,
     NULL);
 
-    gtk_file_filter_set_name(filterDict, "Wörterbuch-Datei (.txt)");
-    gtk_file_filter_add_pattern(filterDict, "*.txt");
+    gtk_file_filter_set_name(filterDict, "Wörterbuch-Datei (.dict)");
+    gtk_file_filter_add_pattern(filterDict, "*.dict");
 
     gtk_file_filter_set_name(filterAny, "Alle Formate");
     gtk_file_filter_add_pattern(filterAny, "*");
@@ -99,7 +102,7 @@ bool choose_file(char* title, char* btnTitle, int action) {
     gtk_file_chooser_add_filter(chooser, filterAny);
     gtk_file_chooser_set_do_overwrite_confirmation(chooser, true);
     if(action == GTK_FILE_CHOOSER_ACTION_SAVE)
-        gtk_file_chooser_set_current_name(chooser, "dict.txt");
+        gtk_file_chooser_set_current_name(chooser, "my.dict");
 
     if(filename) {
         dir = g_path_get_dirname(filename);
@@ -129,27 +132,13 @@ bool file_check_opened() {
 
     return true;
 }
-
-void file_save() {
-    if(!file_check_opened())  return;
-
-    if(!dict_write_file(dicts[DICT_DE], filename)) {
-        error_dialog(
-            "Schreiben von Datei %s ist fehlgeschlagen.", filename,
-            "Bitte stellen Sie sicher, dass Sie die Schreibberechtigung für diese Datei besitzen, und versuchen Sie es anschließend erneut."
-        );
-        return;
-    }
-    dataChanged = false;
-}
-
 bool file_check_unsaved() {
     int response;
     
     if(!dataChanged)  return true;
 
     response = confirm_dialog(
-        "Möchten Sie Ihre Änderungen zuvor speichern?", NULL, NULL
+        "Möchten Sie Ihre Änderungen an %s zuvor speichern?", filename, NULL
     );
     if(response != GTK_RESPONSE_YES)  return (response == GTK_RESPONSE_NO);
     
@@ -157,23 +146,76 @@ bool file_check_unsaved() {
     return true;
 }
 
+void file_open() {
+    if(!file_check_unsaved())  return;
+    
+    if(!choose_file("Wörterbuch-Datei öffnen", "Öffnen", GTK_FILE_CHOOSER_ACTION_OPEN))  return;
+
+    dict_clear(dicts);
+
+    if(!dict_read_file(dicts, filename)) {
+        error_dialog(
+            "Lesen von Datei %s ist fehlgeschlagen.", filename,
+            "Bitte stellen Sie sicher, \n"
+            "- dass Sie die Schreibberechtigung für diese Datei besitzen\n"
+            "- und es tatsächlich eine Wörterbuch-Datei dieses Programms ist"
+            " (Format Dateiinhalt)\n"
+            "und versuchen Sie es anschließend erneut."
+        );
+    }
+    
+    dataChanged = false;
+    display_entries(dicts[lastLang], lastLang);
+}
+void file_new() {
+    FILE* pf;
+    
+    if(!file_check_unsaved())  return;
+
+    if(!choose_file("Wörterbuch-Datei erstellen", "Erstellen", GTK_FILE_CHOOSER_ACTION_SAVE))  return;
+
+    // write test
+    pf = fopen(filename, "wt");
+    if(!pf) {
+        error_dialog(
+            "Anlegen von Datei %s ist fehlgeschlagen.", filename,
+            "Bitte stellen Sie sicher, dass Sie die Schreibberechtigung für diese Datei"
+            " bzw. das Verzeichnis besitzen, und versuchen Sie es anschließend erneut."
+        );
+        return;
+    }
+    fclose(pf);
+
+    dict_clear(dicts);
+    display_entries(dicts[lastLang], lastLang);
+    dataChanged = false;
+}
+
+void file_save() {
+    if(!file_check_opened())  return;
+
+    if(!dict_write_file(dicts[DICT_DE], filename)) {
+        error_dialog(
+            "Schreiben von Datei %s ist fehlgeschlagen.", filename,
+            "Bitte stellen Sie sicher, dass Sie die Schreibberechtigung für"
+            " diese Datei besitzen, und versuchen Sie es anschließend erneut."
+        );
+        return;
+    }
+    dataChanged = false;
+}
 void file_saveas() {
     if(!file_check_opened())  return;
 
-    if(!choose_file("Wörterbuch in anderer Datei speichern", "Speichern", GTK_FILE_CHOOSER_ACTION_SAVE))  return;
+    if(!choose_file(
+        "Wörterbuch in anderer Datei speichern", "Speichern",
+        GTK_FILE_CHOOSER_ACTION_SAVE)
+    )  return;
 
     file_save();
 }
 
-void quit_app() {
-    if(!file_check_unsaved())  return;
-
-    g_free(filename);
-    dict_free(dicts);
-
-    gtk_main_quit();
-}
-
+// ====== entry display & search ======
 void display_entries(tList* dict, int lang) {
     GtkTreeIter iter;
     tDEntry* tmp;
@@ -193,6 +235,7 @@ void display_entries(tList* dict, int lang) {
         -1);
     }
 }
+
 void sort_de() {
     if(!file_check_opened())  return;
 
@@ -216,7 +259,6 @@ void search() {
     query = (char *) gtk_entry_get_text(searchEntry);
     if(strlen(query) == 0) {
         display_entries(dicts[lastLang], lastLang);
-        g_free(query);
         return;
     }
 
@@ -231,8 +273,10 @@ void search() {
     }
 
     display_entries(res, lang);
+    dict_free_search(res);
 }
 
+// ====== entry manipulation ======
 void entry_add() {
     int response;
     char* wordDe;
@@ -240,7 +284,7 @@ void entry_add() {
     
     if(!file_check_opened())  return;
     
-    // Clear fields from previous run
+    // Clear fields in dialog from previous run
     gtk_entry_set_text(entryAddDe, "");
     gtk_entry_set_text(entryAddEn, "");
 
@@ -264,6 +308,7 @@ void entry_remove() {
     GtkTreeModel* model;
     gchar* wordDe;
     gchar* wordEn;
+    int response;
 
     if(!file_check_opened())  return;
 
@@ -284,11 +329,11 @@ void entry_remove() {
         1, &wordEn,
     -1);
 
-    if(GTK_RESPONSE_YES != confirm_dialog(
+    response = confirm_dialog(
         "Möchten Sie den Eintrag \"%s\", \"%s\" wirklich löschen?", wordDe, wordEn
-    ))  return;
+    );
 
-    if(dict_remove(dicts, wordDe, wordEn))  {
+    if(response == GTK_RESPONSE_YES && dict_remove(dicts, wordDe, wordEn))  {
         dataChanged = true;
         gtk_list_store_remove(liststoreDict, &iter);
     }
@@ -297,58 +342,15 @@ void entry_remove() {
     g_free(wordEn);
 }
 
-void file_open() {
-    if(!file_check_unsaved())  return;
-    
-    if(!choose_file("Wörterbuch-Datei öffnen", "Öffnen", GTK_FILE_CHOOSER_ACTION_OPEN))  return;
-
-    dict_clear(dicts);
-
-    if(!dict_read_file(dicts, filename)) {
-        error_dialog(
-            "Lesen von Datei %s ist fehlgeschlagen.", filename,
-            "Bitte stellen Sie sicher, \n"
-            "- dass Sie die Schreibberechtigung für diese Datei besitzen\n"
-            "- und es tatsächlich eine Wörterbuch-Datei dieses Programms ist (Format Dateiinhalt)\n"
-            "und versuchen Sie es anschließend erneut."
-        );
-        return;
-    }
-    
-    dataChanged = false;
-    sort_de(); // show entries
-}
-
-void file_new() {
-    FILE* pf;
-    
-    if(!file_check_unsaved())  return;
-
-    if(!choose_file("Wörterbuch-Datei erstellen", "Erstellen", GTK_FILE_CHOOSER_ACTION_SAVE))  return;
-
-    // write test
-    pf = fopen(filename, "wt");
-    if(!pf) {
-        error_dialog(
-            "Anlegen von Datei %s ist fehlgeschlagen.", filename,
-            "Bitte stellen Sie sicher, dass Sie die Schreibberechtigung für diese Datei bzw. das Verzeichnis besitzen, und versuchen Sie es anschließend erneut."
-        );
-        return;
-    }
-    fclose(pf);
-
-    dict_clear(dicts);
-    sort_de(); // show entries
-    dataChanged = false;
-}
-
+// ====== initialization & termination ======
 int main(int argc, char* argv[]) {
     GtkBuilder* builder;
 
-    // Load from gui.glade
     gtk_init(&argc, &argv);
+
+    // Load GUI from beleg-prog1.glade
     builder = gtk_builder_new();
-    gtk_builder_add_from_file(builder, "gui.glade", NULL);
+    gtk_builder_add_from_file(builder, "beleg-prog1.glade", NULL);
     gtk_builder_connect_signals(builder, NULL);
     appWindow = GTK_WINDOW(gtk_builder_get_object(builder, "app"));
     treeView = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeView"));
@@ -361,6 +363,7 @@ int main(int argc, char* argv[]) {
     g_object_unref(G_OBJECT(builder));
 
     // Prepare GUI
+    gtk_entry_set_max_length(searchEntry, DICT_MAX_WORD_LEN);
     gtk_entry_set_max_length(entryAddDe, DICT_MAX_WORD_LEN);
     gtk_entry_set_max_length(entryAddEn, DICT_MAX_WORD_LEN);
 
@@ -368,9 +371,17 @@ int main(int argc, char* argv[]) {
     dicts[DICT_DE] = list_create();
     dicts[DICT_EN] = list_create();
     
-    
     // Enter GUI main loop
     gtk_main();
 
     return 0;
+}
+
+void quit_app() {
+    if(!file_check_unsaved())  return;
+
+    g_free(filename);
+    dict_free(dicts);
+
+    gtk_main_quit();
 }

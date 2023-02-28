@@ -1,6 +1,6 @@
 // Author: Christoph Born (53034, 22/041/62)
 // unit test for module dict
-// see runtest.sh
+// see runtest.sh (cmd: unit_tests/runtest.sh dicttest)
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -90,30 +90,30 @@ int main() {
     
 
     puts("=== file ===");
-    EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "/noperm.txt"));
-    EVAL_INT_EXPR(dict_read_file(dicts, "/noperm.txt"));
+    EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "/noperm.dict"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "/noperm.dict"));
 
-    EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "dicttest_assets/dict.txt"));
+    EVAL_INT_EXPR(dict_write_file(dicts[DICT_DE], "dicttest_assets/test.dict"));
     dict_clear(dicts);
-    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/dict.txt"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/test.dict"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
     dict_clear(dicts);
-    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid1.txt"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid1.dict"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
     dict_clear(dicts);
-    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid2.txt"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid2.dict"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);
 
     dict_clear(dicts);
-    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid3.txt"));
+    EVAL_INT_EXPR(dict_read_file(dicts, "dicttest_assets/invalid3.dict"));
     print_dict(dicts[DICT_DE], DICT_DE);
     puts("");
     print_dict(dicts[DICT_EN], DICT_EN);

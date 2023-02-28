@@ -21,7 +21,7 @@ then
     includes="$includes ../list.c"
 fi
 
-gcc -o $1 $1.c $includes && ./$1 &> $1.log
+gcc -o $1 -Wall $1.c $includes && ./$1 &> $1.log
 code=$?
 
 if [ $code -ne 0 ]

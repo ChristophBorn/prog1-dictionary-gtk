@@ -1,1 +1,6 @@
 .version
+beleg-prog1
+unit_tests/dicttest
+unit_tests/listtest
+unit_tests/listtest.log
+unit_tests/dicttest.log

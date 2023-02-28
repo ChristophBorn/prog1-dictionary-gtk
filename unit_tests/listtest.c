@@ -1,6 +1,6 @@
 // Author: Christoph Born (53034, 22/041/62)
 // unit test for module list
-// see runtest.sh
+// see runtest.sh (cmd: unit_tests/runtest.sh listtest)
 
 #include <stdio.h>
 #include <stdbool.h>

@@ -6,6 +6,7 @@
 
 #include "list.h"
 
+// ====== list creation & destruction ======
 tList* list_create() {
     tList* pList = malloc(sizeof(tList));
     if(!pList)  return NULL;
@@ -18,6 +19,7 @@ tList* list_create() {
 
     return pList;
 }
+
 bool list_delete(tList* pList) {
     if(!list_is_empty(pList))  return false;
     
@@ -25,7 +27,10 @@ bool list_delete(tList* pList) {
     return true;
 }
 
+// ====== element insertion ======
 /*private*/ bool insert_behind_cnct(tLCnct* pRef, void* pData) {
+    // creates & inserts a connector pointing to pData behind pRef
+    // returns true on success, false otherwise
     tLCnct* pCnct = malloc(sizeof(tLCnct));
     if(!pCnct)  return false;
 
@@ -67,7 +72,10 @@ bool list_insert_sorted(tList* pList, void* pData, int(*compare)(void *, void *)
     return ret;
 }
 
+// ====== element removal ======
 /*private*/ bool remove_cnct(tLCnct* pCnct) {
+    // removes pCnct from the list by changing its neighbor's pointers
+    // stops & returns false if pCnct is head element
     if(!pCnct->pData) return false; // prevent removing head
     
     pCnct->pPrev->pNext = pCnct->pNext;
@@ -101,6 +109,7 @@ bool list_remove_last(tList* pList) {
     return remove_cnct(pList->head.pPrev);
 }
 
+// ====== element retrieval ======
 void* list_get_curr(tList* pList) {
     if(!pList->pCurr)  return NULL;
     
@@ -138,6 +147,7 @@ void* list_get_at(tList* pList, int index) {
     return item;
 }
 
+// ====== other ======
 bool list_is_empty(tList* pList) {
     return (pList->head.pNext == &pList->head);
 }

@@ -74,10 +74,10 @@ dwindling            | aussterbend
 dwindling            | Schwund             
 dwindling            | versiegend          
 === file ===
-(dict_write_file(dicts[DICT_DE], "/noperm.txt")) = 0
-(dict_read_file(dicts, "/noperm.txt")) = 0
-(dict_write_file(dicts[DICT_DE], "dicttest_assets/dict.txt")) = 1
-(dict_read_file(dicts, "dicttest_assets/dict.txt")) = 1
+(dict_write_file(dicts[DICT_DE], "/noperm.dict")) = 0
+(dict_read_file(dicts, "/noperm.dict")) = 0
+(dict_write_file(dicts[DICT_DE], "dicttest_assets/test.dict")) = 1
+(dict_read_file(dicts, "dicttest_assets/test.dict")) = 1
 deutsch              | englisch            
 ==================== | ====================
 aussterbend          | dwindling           
@@ -93,7 +93,7 @@ dwindling            | Schwund
 dwindling            | versiegend          
 employee             | Mitarbeiter         
 potato salad         | Kartoffelsalat      
-(dict_read_file(dicts, "dicttest_assets/invalid1.txt")) = 0
+(dict_read_file(dicts, "dicttest_assets/invalid1.dict")) = 0
 deutsch              | englisch            
 ==================== | ====================
 Kartoffelsalat       | potato salad        
@@ -103,7 +103,7 @@ englisch             | deutsch
 ==================== | ====================
 employee             | Mitarbeiter         
 potato salad         | Kartoffelsalat      
-(dict_read_file(dicts, "dicttest_assets/invalid2.txt")) = 0
+(dict_read_file(dicts, "dicttest_assets/invalid2.dict")) = 0
 deutsch              | englisch            
 ==================== | ====================
 aussterbend          | dwindling           
@@ -113,7 +113,7 @@ englisch             | deutsch
 ==================== | ====================
 dwindling            | aussterbend         
 potato salad         | Kartoffelsalat      
-(dict_read_file(dicts, "dicttest_assets/invalid3.txt")) = 0
+(dict_read_file(dicts, "dicttest_assets/invalid3.dict")) = 0
 deutsch              | englisch            
 ==================== | ====================
 aussterbend          | dwindling           
