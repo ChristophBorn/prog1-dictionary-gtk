@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkTextBuffer"/>
   <object class="GtkListStore" id="liststoreDict">
     <columns>
       <!-- column-name deutsch -->

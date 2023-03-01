@@ -80,7 +80,8 @@ void sort_en();
 void search();
 /* displays entries with matching words for text in search bar & search language
    - if search bar is empty, displays all entries (order determined by global 'lastLang')
-   - callback function for change in search bar */
+   - callback function for change in search bar
+   - callback function for change in search language combo box */
 
 // ====== entry manipulation ======
 

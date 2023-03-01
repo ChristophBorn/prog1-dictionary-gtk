@@ -176,6 +176,7 @@
                 <property name="model">liststoreLang</property>
                 <property name="active">0</property>
                 <property name="id-column">0</property>
+                <signal name="changed" handler="search" swapped="no"/>
                 <child>
                   <object class="GtkCellRendererText"/>
                   <attributes>
