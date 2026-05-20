@@ -1,0 +1,52 @@
+%% Author: Christoph Born (53034, 22/041/62)
+%% excerpt of header-2022ws.tex
+
+\documentclass[12pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[]{ngerman}
+\usepackage[]{enumerate}
+\usepackage[]{amsmath}
+\usepackage[]{amssymb}
+\usepackage[]{mathtools}
+\usepackage[]{graphicx}
+\usepackage[bookmarks]{hyperref}
+\usepackage[]{xstring}
+\usepackage[]{textcomp}
+
+% serifenlose Schrift
+\renewcommand{\familydefault}{\sfdefault}
+
+% custom \maketitle
+\makeatletter
+\newcommand{\module}[1]{\gdef\@module{#1}}
+\newcommand{\professor}[1]{\gdef\@professor{#1}}
+\newcommand{\authordetail}[1]{\gdef\@authordetail{#1}}
+
+\author{Christoph Born}
+\authordetail{}
+\date{\today}
+
+\renewcommand{\maketitle}{
+	\begin{center}
+		{\Large \@title\ des Moduls}\\[1.5em]
+		
+		{\Huge \@module}\\[1.5em]
+		
+		{\Large bei \@professor}\\[5em]
+		
+		
+		{\Large \@author}
+		\IfEq{\@authordetail}{}{
+			\\[1em]
+		}{
+			\\[0.5em]
+			
+			\@authordetail\\[1em]
+		}
+		
+		zuletzt geändert am \@date\\[8em]
+	\end{center}
+}
+\makeatother

@@ -7,3 +7,10 @@
 /unit_tests/listtest
 /unit_tests/listtest.log
 /unit_tests/dicttest.log
+
+# LaTeX caching files
+/docs/*.aux
+/docs/*.log
+/docs/*.out
+/docs/*.synctex.gz
+/docs/*.toc
