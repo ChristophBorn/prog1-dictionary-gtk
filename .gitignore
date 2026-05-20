@@ -1,6 +1,9 @@
-.version
-beleg-prog1
-unit_tests/dicttest
-unit_tests/listtest
-unit_tests/listtest.log
-unit_tests/dicttest.log
+# compilation script output
+/.version
+/beleg-prog1
+
+# unit test output
+/unit_tests/dicttest
+/unit_tests/listtest
+/unit_tests/listtest.log
+/unit_tests/dicttest.log
