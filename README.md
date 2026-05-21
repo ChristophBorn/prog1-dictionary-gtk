@@ -3,6 +3,8 @@ Beleg für das Modul Programmierung 1 (I120) bei Prof. Dr.-Ing. Arnold Beck
 
 von Christoph Born
 
+![Screenshot](docs/main%20window.png)
+
 ## Aufgabenstellung
 
 **Variante Aufgabenstellung:** Wörterbuch deu-engl / engl-deu  
